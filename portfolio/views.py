@@ -1,3 +1,4 @@
+from .utils import fetch_and_store_historical_data
 from .utils import update_all_stocks
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -68,3 +69,21 @@ class UpdateStockPricesView(APIView):
     def post(self, request):
         update_all_stocks()
         return Response({"message": "Stock prices updated successfully!"})
+
+
+class UpdateHistoricalDataView(APIView):
+    """
+    특정 주식의 히스토리컬 데이터를 업데이트합니다.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, stock_id):
+        try:
+            stock = Stock.objects.get(
+                id=stock_id, portfolio__user=request.user)
+            fetch_and_store_historical_data(stock)
+            return Response({"message": f"Historical data for {stock.ticker} updated successfully."})
+        except Stock.DoesNotExist:
+            return Response({"error": "Stock not found or not owned by the user."}, status=404)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)

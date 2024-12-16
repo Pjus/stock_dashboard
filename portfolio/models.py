@@ -29,3 +29,21 @@ class Stock(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.ticker})"
+
+
+class HistoricalStockData(models.Model):
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name='historical_data')
+    date = models.DateField()  # 데이터 날짜
+    open_price = models.DecimalField(max_digits=12, decimal_places=2)  # 시가
+    high_price = models.DecimalField(max_digits=12, decimal_places=2)  # 고가
+    low_price = models.DecimalField(max_digits=12, decimal_places=2)  # 저가
+    close_price = models.DecimalField(max_digits=12, decimal_places=2)  # 종가
+    volume = models.BigIntegerField()  # 거래량
+
+    class Meta:
+        unique_together = ('stock', 'date')  # 동일 날짜의 중복 데이터 방지
+        ordering = ['date']  # 날짜순 정렬
+
+    def __str__(self):
+        return f"{self.stock.ticker} - {self.date}"
