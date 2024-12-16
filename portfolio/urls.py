@@ -5,6 +5,7 @@ from .views import (
     StockListCreateView,
     StockDetailView,
     UpdateStockPricesView,
+    UpdateHistoricalDataView,
 )
 
 urlpatterns = [
@@ -16,5 +17,7 @@ urlpatterns = [
          StockDetailView.as_view(), name='stock-detail'),
     path('update-prices/', UpdateStockPricesView.as_view(),
          name='update-stock-prices'),
+    path('stocks/<int:stock_id>/update-historical-data/',
+         UpdateHistoricalDataView.as_view(), name='update-historical-data'),
 
 ]

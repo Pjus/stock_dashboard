@@ -1,3 +1,5 @@
+from portfolio.utils import fetch_and_store_historical_data
+from portfolio.models import Stock, HistoricalStockData
 from portfolio.models import Stock
 from unittest.mock import patch
 from django.test import TestCase
@@ -205,3 +207,22 @@ class UpdateStockPricesTestCase(TestCase):
 
         self.assertEqual(self.stock1.current_price, 145.00)  # 업데이트 실패, 기존 값 유지
         self.assertEqual(self.stock2.current_price, 720.00)  # 업데이트 실패, 기존 값 유지
+
+
+class HistoricalStockDataTestCase(TestCase):
+    def setUp(self):
+        # 테스트용 Stock 생성
+        self.stock = Stock.objects.create(
+            ticker="AAPL",
+            name="Apple Inc.",
+            quantity=10,
+            purchase_price=150.00,
+            purchase_date="2024-01-01"
+        )
+
+    def test_fetch_and_store_historical_data(self):
+        """히스토리컬 데이터 가져오기 및 저장 테스트"""
+        fetch_and_store_historical_data(self.stock)
+        historical_count = HistoricalStockData.objects.filter(
+            stock=self.stock).count()
+        self.assertTrue(historical_count > 0)  # 데이터가 저장되었는지 확인
