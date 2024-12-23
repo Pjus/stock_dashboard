@@ -2,17 +2,21 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from accounts.models import CustomUser
-from portfolio.models import Stock, HistoricalStockData
+from portfolio.models import Stock, HistoricalStockData, Portfolio
 from backtesting.models import Backtest
+
 
 class BacktestAPITestCase(TestCase):
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username="testuser", password="testpassword")
+        self.user = CustomUser.objects.create_user(
+            username="testuser", password="testpassword")
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
+        self.portfolio = Portfolio.objects.create(
+            user=self.user, name="My Portfolio", description="Test portfolio")
 
         self.stock = Stock.objects.create(
-            portfolio=None,
+            portfolio=self.portfolio,
             ticker="AAPL",
             name="Apple Inc.",
             quantity=10,
@@ -20,8 +24,10 @@ class BacktestAPITestCase(TestCase):
             purchase_date="2024-01-01"
         )
         HistoricalStockData.objects.bulk_create([
-            HistoricalStockData(stock=self.stock, date="2024-01-01", open_price=145, high_price=150, low_price=140, close_price=145, volume=100000),
-            HistoricalStockData(stock=self.stock, date="2024-01-02", open_price=150, high_price=155, low_price=145, close_price=155, volume=120000),
+            HistoricalStockData(stock=self.stock, date="2024-01-01", open_price=145,
+                                high_price=150, low_price=140, close_price=145, volume=100000),
+            HistoricalStockData(stock=self.stock, date="2024-01-02", open_price=150,
+                                high_price=155, low_price=145, close_price=155, volume=120000),
         ])
 
     def test_backtest_success(self):
@@ -31,6 +37,9 @@ class BacktestAPITestCase(TestCase):
             "end_date": "2024-01-02",
         }
         response = self.client.post("/api/backtesting/backtest/", data)
+        print(response.status_code)  # 상태 코드 출력
+        print(response.data)         # API 응답 데이터 출력 (에러 메시지 확인)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("return_percentage", response.data["data"])
         self.assertEqual(response.data["data"]["return_percentage"], 6.9)
