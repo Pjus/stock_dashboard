@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'portfolio',
     'backtesting',
     'recommendations',
+    'pages',
     'rest_framework',  # DRF 설치 시 추가
 ]
 
@@ -145,3 +146,11 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'your_email@gmail.com'
 EMAIL_HOST_PASSWORD = 'your_email_password'
+
+
+STATIC_URL = '/static/'
+
+# Optional: 추가 디렉토리에서 정적 파일 로드
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]

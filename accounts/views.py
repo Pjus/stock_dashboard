@@ -1,3 +1,6 @@
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,6 +33,14 @@ class LoginView(APIView):
                 "access": str(refresh.access_token),
             }, status=status.HTTP_200_OK)
         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+def logout_view(request):
+    """
+    Logs out the user and redirects to the login page.
+    """
+    logout(request)
+    return redirect('/')
 
 
 class UserDetailView(APIView):
@@ -69,7 +80,3 @@ class PasswordResetConfirmView(APIView):
             serializer.save()
             return Response({"message": "Password has been reset successfully."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-def home(request):
-    return HttpResponse("<h1>Welcome to the Stock Manager API</h1><p>Use the API endpoints to interact with the backend.</p>")

@@ -10,6 +10,4 @@ urlpatterns = [
          name='password_reset_request'),
     path('password-reset-confirm/', PasswordResetConfirmView.as_view(),
          name='password_reset_confirm'),
-
-
 ]

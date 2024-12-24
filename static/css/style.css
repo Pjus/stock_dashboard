@@ -1,0 +1,61 @@
+/* General Body Styling */
+body {
+    background-color: #f8f9fa;
+    /* 전체 배경색 */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Navbar Styling */
+.navbar {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Hero Section Styling */
+.hero-section {
+    background: linear-gradient(to bottom right, #007bff, #0056b3);
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.hero-section a {
+    margin: 5px;
+}
+
+/* Wrapper 설정 */
+#wrapper {
+    height: auto;
+    min-height: 100vh;
+    /* 전체 뷰포트를 채움 */
+    padding-bottom: 60px;
+    /* 푸터 높이와 동일하게 설정 */
+    position: relative;
+}
+
+/* Footer 스타일 */
+footer {
+    height: 60px;
+    /* 푸터 높이 */
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    line-height: 60px;
+    /* 푸터 내용이 가운데 정렬되도록 설정 */
+    position: relative;
+    transform: translateY(-100%);
+}
